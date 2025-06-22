@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-final readonly class User
+final readonly class User implements EntityInterface
 {
     public function __construct(
         private ?int $id = null,

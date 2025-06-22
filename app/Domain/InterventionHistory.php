@@ -6,7 +6,7 @@ namespace App\Domain;
 
 use DateTime;
 
-final readonly class InterventionHistory
+final readonly class InterventionHistory implements EntityInterface
 {
     public function __construct(
         private ?int $id = null,

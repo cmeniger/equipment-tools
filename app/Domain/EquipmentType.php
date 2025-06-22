@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-final readonly class EquipementType
+final readonly class EquipementType implements EntityInterface
 {
     public function __construct(
         private ?int $id = null,

@@ -7,7 +7,7 @@ namespace App\Domain;
 use App\Domain\Enum\State;
 use DateTime;
 
-final readonly class Equipment
+final readonly class Equipment implements EntityInterface
 {
     /** @var array<InterventionHistory> */
     private array $interventions = [];

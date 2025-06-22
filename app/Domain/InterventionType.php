@@ -6,7 +6,7 @@ namespace App\Domain;
 
 use App\Domain\Enum\State;
 
-final readonly class InterventionType
+final readonly class InterventionType implements EntityInterface
 {
     public function __construct(
         private ?int $id = null,
