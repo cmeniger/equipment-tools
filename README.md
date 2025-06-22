@@ -10,5 +10,10 @@ docker compose build
 docker compose up -d
 ```
 
+### Initialize database
+```
+php .\init-database.php
+```
+
 ### App
 http://localhost

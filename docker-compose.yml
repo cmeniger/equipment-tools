@@ -44,10 +44,10 @@ services:
       - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
       - "./docker/mysql/dbdata:/var/lib/mysql"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-development}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
-      MYSQL_USER: ${MYSQL_USER:-mysql}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
 
   phpmyadmin:
     image: phpmyadmin

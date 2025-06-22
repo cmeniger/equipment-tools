@@ -11,6 +11,8 @@ use App\Infrastructure\Response;
 use App\Infrastructure\Routing\Router;
 
 try {
+    $env = parse_ini_file('../.env');
+    
     $router = new Router(url: $_SERVER['REQUEST_URI']);
     
     $router->get(path: '/api/health', controller: HealthController::class, name: 'api:health');
