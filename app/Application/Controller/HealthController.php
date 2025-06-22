@@ -6,7 +6,7 @@ namespace App\Application\Controller;
 
 use App\Infrastructure\Response;
 
-final class HealthController
+final class HealthController extends Controller
 {
     public function __invoke(): Response
     {

@@ -7,10 +7,10 @@ namespace App\Application\Controller\Equipment;
 use App\Application\Controller\Controller;
 use App\Infrastructure\Response;
 
-final class GetEquipmentsController extends Controller
+final class GetEquipmentController extends Controller
 {
     public function __invoke(): Response
     {
-        return Response::JsonResponse(content: ['page' => (int) $this->getParameter(name: 'page', default: 1)]);
+        return Response::JsonResponse(content: ['item' => $this->getId(name: 'id')]);
     }
 }

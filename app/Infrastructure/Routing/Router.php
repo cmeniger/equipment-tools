@@ -8,38 +8,42 @@ use App\Infrastructure\Routing\Exception\RouteNotFoundException;
 
 final class Router {
 
-    private $url;
-    private $routes = [];
-    private $namedRoutes = [];
+    private string $url;
+    private array $queryParameters = [];
+    private array $routes = [];
+    private array $namedRoutes = [];
 
     public function __construct($url)
     {
-        $this->url = $url;
+        $this->url = explode(separator: '?', string: $url)[0];
+        $this->queryParameters = $_GET; 
     }
 
-    public function get(string $path, string $controller, string $name): Route
+    public function get(string $path, string $controller, string $name, array $params = []): Route
     {
         return $this->add(
             path: $path, 
             controller: $controller, 
             name: $name, 
-            method: 'GET'
+            method: 'GET',
+            params: $params,
         );
     }
 
-    public function post(string $path, string $controller, string $name): Route
+    public function post(string $path, string $controller, string $name, array $params = []): Route
     {
         return $this->add(
             path: $path, 
             controller: $controller, 
             name: $name, 
-            method: 'POST'
+            method: 'POST',
+            params: $params,
         );
     }
 
-    private function add(string $path, string $controller, string $name, string $method): Route
+    private function add(string $path, string $controller, string $name, string $method, array $params = []): Route
     {
-        $route = new Route(path: $path, controller: $controller);
+        $route = new Route(path: $path, controller: $controller, queryParameters: $this->queryParameters, params: $params);
                
         $this->routes[$method][] = $route;
         $this->namedRoutes[$name] = $route;
@@ -62,7 +66,8 @@ final class Router {
         throw new RouteNotFoundException();
     }
 
-    public function url($name, $params = []){
+    public function url($name, $params = []): string
+    {
         if(!isset($this->namedRoutes[$name])){
             throw new RouteNotFoundException();
         }
