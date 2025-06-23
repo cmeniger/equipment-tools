@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-final readonly class EquipementType implements EntityInterface
+final readonly class EquipmentType implements EntityInterface
 {
     public function __construct(
         private ?int $id = null,
@@ -16,12 +16,11 @@ final readonly class EquipementType implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->name = $data['name'] ?? null;
-        $self->description = $data['description'] ?? null;
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            name: $data['name'] ?? null,
+            description: $data['description'] ?? null,
+        );
     }
 
     public function getId(): ?int

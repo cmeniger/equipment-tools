@@ -6,14 +6,18 @@ namespace App\Infrastructure\Routing;
 
 final class Route {
     private string $path;
+    private string $host;
     private string $controller;
+    private string $urlParams;
     private array $matches = [];
     private array $params = [];
     private array $queryParameters = [];
 
-    public function __construct(string $path, string $controller, array $queryParameters = [], array $params = [])
+    public function __construct(string $path, string $urlParams, string $host, string $controller, array $queryParameters = [], array $params = [])
     {
         $this->path = trim(string: $path, characters: '/');
+        $this->urlParams = $urlParams;
+        $this->host = $host;
         $this->controller = $controller;
         $this->queryParameters = $queryParameters;
         $this->params = $params;
@@ -42,7 +46,7 @@ final class Route {
         return true;
     }
 
-    private function paramMatch($match): string
+    private function paramMatch(array $match): string
     {
         if(isset($this->params[$match[1]])) {
             return '(' . $this->params[$match[1]] . ')';
@@ -51,11 +55,18 @@ final class Route {
         return '([^/]+)';
     }
 
-    public function getUrl($params): string
+    public function getUrl(array $params = [], bool $withHost = false, bool $withParams = false): string
     {
         $path = $this->path;
         foreach($params as $k => $v){
             $path = str_replace(search: ":$k", replace: $v, subject: $path);
+        }
+        
+        if ($withHost) {
+            $path = $this->host.'/'.$path;
+        }
+        if ($withParams) {
+            $path = $path.'?'.$this->urlParams;
         }
         
         return $path;
@@ -63,7 +74,7 @@ final class Route {
 
     public function call(): mixed
     {
-        $controller = new $this->controller($this->matches, $this->queryParameters);
+        $controller = new $this->controller($this->matches, $this->queryParameters, $this);
 
         return $controller();
     }

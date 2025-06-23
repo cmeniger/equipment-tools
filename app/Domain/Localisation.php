@@ -16,12 +16,11 @@ final readonly class Localisation implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->name = $data['name'] ?? null;
-        $self->description = $data['description'] ?? null;
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            name: $data['name'] ?? null,
+            description: $data['description'] ?? null,
+        );
     }
 
     public function getId(): ?int

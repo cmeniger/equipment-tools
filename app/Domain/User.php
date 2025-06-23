@@ -16,12 +16,11 @@ final readonly class User implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->firstName = $data['firstName'] ?? null;
-        $self->lastName = $data['lastName'] ?? null;
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            firstName: $data['firstName'] ?? null,
+            lastName: $data['lastName'] ?? null,
+        );
     }
 
     public function getId(): ?int

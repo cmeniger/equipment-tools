@@ -23,17 +23,18 @@ final readonly class InterventionHistory implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->date = $data['date'] ? new DateTime(datetime: $data['date']) : null;
-        $self->description = $data['description'] ?? null;
-        $self->maintenanceDate = $data['maintenanceDate'] ? new DateTime(datetime: $data['maintenanceDate']) : null;
-        $self->maintenanceText = $data['maintenanceText'] ?? null;
-        $self->equipment = $data['equipment'] ? Equipment::buildFromArray(data: $data['equipment']) : null;
-        $self->type = $data['type'] ? InterventionType::buildFromArray(data: $data['type']) : null;
-        $self->owner = $data['owner'] ? User::buildFromArray(data: $data['owner']) : null;
+        return new self(
+            id: $data['id'] ?? null,
+            date: isset($data['date']) ? new DateTime(datetime: $data['date']) : null,
+            description: $data['description'] ?? null,
+            maintenanceDate: isset($data['maintenanceDate']) ? new DateTime(datetime: $data['maintenanceDate']) : null,
+            maintenanceText: $data['maintenanceText'] ?? null,
+            equipment: isset($data['equipment']) ? Equipment::buildFromArray(data: $data['equipment']) : null,
+            type: isset($data['type']) ? InterventionType::buildFromArray(data: $data['type']) : null,
+            owner: isset($data['owner']) ? User::buildFromArray(data: $data['owner']) : null,
 
-        return $self;
+
+        );
     }
 
     public function getId(): ?int

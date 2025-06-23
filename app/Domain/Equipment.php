@@ -7,7 +7,7 @@ namespace App\Domain;
 use App\Domain\Enum\State;
 use DateTime;
 
-final readonly class Equipment implements EntityInterface
+final class Equipment implements EntityInterface
 {
     /** @var array<InterventionHistory> */
     private array $interventions = [];
@@ -16,28 +16,28 @@ final readonly class Equipment implements EntityInterface
     private array $localisations = [];
 
     public function __construct(
-        private ?int $id = null,
-        private ?DateTime $purchaseDate = null,
-        private ?DateTime $commissioningDate = null,
-        private ?DateTime $maintenanceDate = null,
-        private ?Localisation $localisation = null,
-        private ?EquipementType $type = null,
-        private ?State $state = null,
+        private readonly ?int $id = null,
+        private readonly ?DateTime $purchaseDate = null,
+        private readonly ?DateTime $commissioningDate = null,
+        private readonly ?DateTime $maintenanceDate = null,
+        private readonly ?Localisation $localisation = null,
+        private readonly ?EquipmentType $type = null,
+        private readonly ?State $state = null,
     ) {
 
     }
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->purchaseDate = $data['purchaseDate'] ? new DateTime(datetime: $data['purchaseDate']) : null;
-        $self->commissioningDate = $data['commissioningDate'] ? new DateTime(datetime: $data['commissioningDate']) : null;
-        $self->maintenanceDate = $data['maintenanceDate'] ? new DateTime(datetime: $data['maintenanceDate']) : null;
-        $self->type = $data['type'] ? EquipementType::buildFromArray(data: $data['type']) : null;
-        $self->state = State::tryFrom(value: $data['state']);
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            purchaseDate: isset($data['purchaseDate']) ? new DateTime(datetime: $data['purchaseDate']) : null,
+            commissioningDate: isset($data['commissioningDate']) ? new DateTime(datetime: $data['commissioningDate']) : null,
+            maintenanceDate: isset($data['maintenanceDate']) ? new DateTime(datetime: $data['maintenanceDate']) : null,
+            localisation: isset($data['localisation']) ? Localisation::buildFromArray(data: $data['localisation']) : null,
+            type: isset($data['type']) ? EquipmentType::buildFromArray(data: $data['type']) : null,
+            state: State::tryFrom(value: (string) $data['state'] ?? ''),
+        );
     }
 
     public function getId(): ?int
@@ -60,7 +60,12 @@ final readonly class Equipment implements EntityInterface
         return $this->maintenanceDate;
     }
 
-    public function getType(): ?EquipementType
+    public function getLocalisation(): ?Localisation
+    {
+        return $this->localisation;
+    }
+
+    public function getType(): ?EquipmentType
     {
         return $this->type;
     }

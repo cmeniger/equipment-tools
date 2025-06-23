@@ -2,22 +2,21 @@
 
 declare(strict_types=1);
 
+namespace App\Infrastructure;
+
 abstract class Database
-{
-    public static $affected_rows;
- 
-    public static function connect(): PDO
+{ 
+    public static function connect(): \PDO
     {
         try {
             $env = parse_ini_file(__DIR__ . '/../../.env');
-            $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8', $env['MYSQL_HOST'], $env['MYSQL_DATABASE']);
-        
-            $pdo = new PDO($dsn, username: $env['MYSQL_USER'], password: $env['MYSQL_PASSWORD']);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            return $pdo;
-        } catch (PDOException $e) {
-            throw new Exception("Error executing query: " . $e->getMessage());
+            $db = new \PDO(dsn: 'sqlite:' . __DIR__ . '/../../' . $env['SQLITE_DB']);
+            $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            return $db;
+        } catch (\PDOException $e) {
+            throw new \PDOException("Error executing query: " . $e->getMessage());
         }
     }
 
@@ -28,7 +27,7 @@ abstract class Database
             $pdo = self::connect();
             $query = $pdo->prepare($sql);
             $query->execute();
-            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            $data = $query->fetchAll(\PDO::FETCH_ASSOC);
             
             // Free the memory
             $query = null; 
@@ -36,8 +35,8 @@ abstract class Database
             
             return $data;
         }
-        catch(PDOException $e) {
-            throw new Exception("Error executing query: " . $e->getMessage());
+        catch(\PDOException $e) {
+            throw new \Exception("Error executing select query: " . $e->getMessage());
         }
     }
  
@@ -47,32 +46,30 @@ abstract class Database
             $pdo = self::connect();
             $query = $pdo->prepare($sql);
             $query->execute();
-            $data = $query->fetch(PDO::FETCH_ASSOC);
+            $id = $pdo->lastInsertId();
             
             // Free the memory
             $query = null; 
             $pdo = null;	
             
-            return $data['id'];
+            return (int) $id;
         }
-        catch(PDOException $e) {
-            throw new Exception("Error executing query: " . $e->getMessage());
+        catch(\PDOException $e) {
+            throw new \Exception("Error executing insert query: " . $e->getMessage());
         }
     }
  
-    public static function query(string $query): void
+    public static function query(string $sql): void
     {
         try {
             $pdo = self::connect();
-            $query = $pdo->prepare($query);
-            $query->execute();
+            $pdo->exec($sql);
             
             // Free the memory
-            $query = null; 
             $pdo = null;
         }
-        catch(PDOException $e) {
-            throw new Exception("Error executing query: " . $e->getMessage());
+        catch(\PDOException $e) {
+            throw new \Exception("Error executing query: " . $e->getMessage());
         }
     }
 }

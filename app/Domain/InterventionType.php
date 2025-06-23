@@ -11,7 +11,7 @@ final readonly class InterventionType implements EntityInterface
     public function __construct(
         private ?int $id = null,
         private ?string $name = null,
-        private ?EquipementType $type = null,
+        private ?EquipmentType $type = null,
         private ?State $state = null,
     ) {
 
@@ -19,13 +19,12 @@ final readonly class InterventionType implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->name = $data['name'] ?? null;
-        $self->type = $data['type'] ? EquipementType::buildFromArray(data: $data['type']) : null;
-        $self->state = State::tryFrom(value: $data['state']);
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            name: $data['name'] ?? null,
+            type: isset($data['type']) ? EquipmentType::buildFromArray(data: $data['type']) : null,
+            state: State::tryFrom(value: (string) $data['state'] ?? ''),
+        );
     }
 
     public function getId(): ?int

@@ -1,5 +1,5 @@
 .vscode
 
-docker/mysql/dbdata
+docker/sqlite/db
 docker/nginx/logs
 docker/redis/appendonlydir

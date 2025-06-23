@@ -9,13 +9,19 @@ use App\Infrastructure\Routing\Exception\RouteNotFoundException;
 final class Router {
 
     private string $url;
+    private string $urlParams;
+    private string $host;
     private array $queryParameters = [];
     private array $routes = [];
     private array $namedRoutes = [];
 
-    public function __construct($url)
+    public function __construct($url, $host)
     {
-        $this->url = explode(separator: '?', string: $url)[0];
+        $queryParts = explode(separator: '?', string: $url);
+        
+        $this->url = $queryParts[0];
+        $this->urlParams = $queryParts[1];
+        $this->host = $host;
         $this->queryParameters = $_GET; 
     }
 
@@ -43,7 +49,7 @@ final class Router {
 
     private function add(string $path, string $controller, string $name, string $method, array $params = []): Route
     {
-        $route = new Route(path: $path, controller: $controller, queryParameters: $this->queryParameters, params: $params);
+        $route = new Route(path: $path, urlParams: $this->urlParams, host: $this->host, controller: $controller, queryParameters: $this->queryParameters, params: $params);
                
         $this->routes[$method][] = $route;
         $this->namedRoutes[$name] = $route;

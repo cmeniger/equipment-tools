@@ -12,9 +12,9 @@ use App\Infrastructure\Routing\Router;
 
 try {
     $env = parse_ini_file('../.env');
-    
-    $router = new Router(url: $_SERVER['REQUEST_URI']);
-    
+    $host = (isset($_SERVER['HTTPS']) ?  'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+
+    $router = new Router(url: $_SERVER['REQUEST_URI'], host: $host);
     $router->get(path: '/api/health', controller: HealthController::class, name: 'api:health');
     $router->get(path: '/api/equipments', controller: GetEquipmentsController::class, name: 'api:equipments:list');
     $router->get(path: '/api/equipments/:id', controller: GetEquipmentController::class, name: 'api:equipments:item');

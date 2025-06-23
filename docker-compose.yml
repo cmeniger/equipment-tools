@@ -9,7 +9,7 @@ services:
     container_name: docker.php
     tty: true
     depends_on:
-      - mysql
+      - sqlite3
       - redis
     networks:
       - docker.network
@@ -31,38 +31,13 @@ services:
     volumes:
       - .:/var/www
 
-  mysql:
-    image: mysql:5
-    restart: unless-stopped
-    container_name: docker.mysql
+  sqlite3:
+    image: nouchka/sqlite3:latest
+    container_name: docker.sqlite
+    stdin_open: true
     tty: true
-    ports:
-      - "3306:3306"
-    networks:
-      - docker.network
     volumes:
-      - "./docker/mysql/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro"
-      - "./docker/mysql/dbdata:/var/lib/mysql"
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: docker.phpmyadmin
-    tty: true
-    depends_on:
-      - mysql
-    ports:
-      - "8080:80"
-    networks:
-      - docker.network
-    environment:
-      PMA_HOST: mysql
-      PMA_ARBITRARY: 1
-      PMA_PORT: 3306
+      - ./docker/sqlite/db/:/root/db/
 
   redis:
     image: bitnami/redis:latest

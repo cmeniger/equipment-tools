@@ -19,13 +19,12 @@ final readonly class LocalisationHistory implements EntityInterface
 
     public static function buildFromArray(array $data): self
     {
-        $self = new self();
-        $self->id = $data['id'] ?? null;
-        $self->date = $data['date'] ? new DateTime(datetime: $data['date']) : null;
-        $self->equipment = $data['equipment'] ? Equipment::buildFromArray(data: $data['equipment']) : null;
-        $self->localisation = $data['localisation'] ? Localisation::buildFromArray(data: $data['localisation']) : null;
-
-        return $self;
+        return new self(
+            id: $data['id'] ?? null,
+            date: isset($data['date']) ? new DateTime(datetime: $data['date']) : null,
+            equipment: isset($data['equipment']) ? Equipment::buildFromArray(data: $data['equipment']) : null,
+            localisation: isset($data['localisation']) ? Localisation::buildFromArray(data: $data['localisation']) : null,
+        );
     }
 
     public function getId(): ?int
