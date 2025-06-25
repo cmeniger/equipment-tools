@@ -16,7 +16,7 @@ abstract class Controller
     {
     }
 
-    protected function getId(string $name, mixed $default = null): mixed
+    protected function getId(string $name = 'id', mixed $default = null): mixed
     {
         return $this->queryIds[$name] ?? $default;
     }

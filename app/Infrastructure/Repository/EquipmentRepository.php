@@ -9,6 +9,34 @@ use App\Infrastructure\Database;
 
 final readonly class EquipmentRepository
 {
+    public function findById(int $id): ?Equipment
+    {
+        // Query
+        $query = '
+            SELECT eq.*, et.name as et__name, et.description as et__description, lo.name as lo__name, lo.description as lo__description 
+            FROM `equipments` AS eq
+            LEFT JOIN `equipment_types` AS et on et.id = eq.equipment_type_id
+            LEFT JOIN `localisations` AS lo on lo.id = eq.localisation_id
+            WHERE eq.id=' . $id
+        ;
+        
+        $row = Database::select(sql: $query)[0] ?? null;
+        
+        if ($row === null) {
+            return null;
+        }
+
+        return Equipment::buildFromArray(data: [
+            'id' => $row['id'],
+            'purchaseDate' => $row['purchase_date'],
+            'commissioningDate' => $row['commissioning_date'],
+            'maintenanceDate' => $row['maintenance_date'],
+            'localisation' => ['id' => $row['localisation_id'], 'name' => $row['lo__name'], 'description' => $row['lo__description']],
+            'type' => ['id' => $row['equipment_type_id'], 'name' => $row['et__name'], 'description' => $row['et__description']],
+            'state' => $row['state'],
+        ]);
+    }
+    
     /**
      * @return Equipment[]
      */

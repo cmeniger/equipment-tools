@@ -20,7 +20,7 @@ final class Router {
         $queryParts = explode(separator: '?', string: $url);
         
         $this->url = $queryParts[0];
-        $this->urlParams = $queryParts[1];
+        $this->urlParams = $queryParts[1] ?? '';
         $this->host = $host;
         $this->queryParameters = $_GET; 
     }
