@@ -6,12 +6,7 @@ use Tests\ApiTestCase;
 
 class healthTest extends ApiTestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
+    public function testHealth(): void
     {
         $response = $this->get('/api/health');
 
