@@ -1,5 +1,8 @@
 .vscode
+.phpunit.result.cache
 
 docker/sqlite/db
 docker/nginx/logs
 docker/redis/appendonlydir
+
+vendor

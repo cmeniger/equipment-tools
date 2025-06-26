@@ -17,3 +17,9 @@ php .\init-database.php
 
 ### App
 http://localhost
+
+
+### Run tests
+```
+composer test
+```
